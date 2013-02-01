@@ -15,7 +15,7 @@ describe TimeHelper do
 
   it "retrieves a recorded time" do
     serialized_date = "may 4 1886"
-    date_object = DateTime.parse(serialized_date)
+    date_object = Date.parse(serialized_date)
 
 
     Clock.stub(now: serialized_date)
