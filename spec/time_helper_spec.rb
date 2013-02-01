@@ -12,4 +12,17 @@ describe TimeHelper do
     datas = YAML.load(open(TimeHelper::FILENAME))
     datas[datas.keys.first].should == 100
   end
+
+  it "retrieves a recorded time" do
+    serialized_date = "may 4 1886"
+    date_object = DateTime.parse(serialized_date)
+
+
+    Clock.stub(now: serialized_date)
+    Clock.stub(:serialize).with(date_object).and_return(serialized_date)
+
+    TimeHelper.record_require_time(100)
+
+    TimeHelper.get_require_time(date_object).should == 100
+  end
 end
