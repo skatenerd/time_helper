@@ -4,14 +4,14 @@ class TimeHelper
   FILENAME = "spec_helper_times.yml"
   def self.record_require_time(require_time)
     datas = all_data
-    date_time = Clock.serialized_now
+    date_time = serialized_now
     datas[date_time] = require_time
     write_data(datas)
   end
 
   def self.get_require_time(run_date)
     datas = all_data
-    datas[Clock.serialize(run_date)]
+    datas[CrappyORM.serialize(run_date)]
   end
 
   def self.all_data
@@ -27,22 +27,26 @@ class TimeHelper
     f.write(YAML.dump(data))
     f.close
   end
-end
 
-class Clock
-  def self.now
-    DateTime.now
-  end
+  private
 
   def self.serialized_now
-    serialize(now)
+    CrappyORM.serialize(Clock.now)
   end
+end
 
+class CrappyORM
   def self.deserialize(serialized)
     DateTime.parse(serialized)
   end
 
   def self.serialize(date_time)
     date_time.strftime("%b %d %Y %H:%M:%S")
+  end
+end
+
+class Clock
+  def self.now
+    DateTime.now
   end
 end
