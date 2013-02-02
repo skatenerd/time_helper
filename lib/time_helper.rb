@@ -35,6 +35,6 @@ class Clock
   end
 
   def self.serialize(date_time)
-    date_time.strftime("%m%d%y%H%M%S")
+    date_time.strftime("%b %d %Y %H:%M:%S")
   end
 end
