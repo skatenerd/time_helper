@@ -40,15 +40,15 @@ describe TimeHelper do
 
   it "supports multiple writes" do
     first_serialized_date = "may 4 1886"
-    Clock.stub(:serialize).and_return(first_serialized_date)
+    Clock.stub(:now).and_return(first_serialized_date)
     TimeHelper.record_require_time(100)
-
     second_serialized_date = "april 29 1992"
-    Clock.stub(:serialize).and_return(second_serialized_date)
+    Clock.stub(:now).and_return(second_serialized_date)
     TimeHelper.record_require_time(200)
 
+    Clock.stub(:serialize).and_return(first_serialized_date)
     TimeHelper.get_require_time(DateTime.parse(first_serialized_date)).should == 100
+    Clock.stub(:serialize).and_return(second_serialized_date)
     TimeHelper.get_require_time(DateTime.parse(second_serialized_date)).should == 200
-
   end
 end
