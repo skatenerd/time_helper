@@ -10,16 +10,15 @@ describe TimeHelper do
 
   it "records the time" do
     TimeHelper.record_require_time(100)
-    datas = YAML.load(open(TimeHelper::FILENAME))
+    datas = TimeHelper.all_data
     datas[datas.keys.first].should == 100
+    datas.keys.first
   end
 
   it "retrieves a recorded time" do
-    serialized_date = "may 4 1886"
-    date_object = DateTime.parse(serialized_date)
+    date_object = DateTime.parse("may 4 1886 2:22:14pm")
 
-    Clock.stub(now: serialized_date)
-    Clock.stub(:serialize).with(date_object).and_return(serialized_date)
+    Clock.stub(now: date_object)
 
     TimeHelper.record_require_time(100)
 
@@ -39,16 +38,17 @@ describe TimeHelper do
   end
 
   it "supports multiple writes" do
-    first_serialized_date = "may 4 1886"
-    Clock.stub(:now).and_return(first_serialized_date)
+    first_date = DateTime.parse("may 4 1886")
+    Clock.stub(:now).and_return(first_date)
     TimeHelper.record_require_time(100)
-    second_serialized_date = "april 29 1992"
-    Clock.stub(:now).and_return(second_serialized_date)
+
+    second_date = DateTime.parse("april 29 1992")
+    Clock.stub(:now).and_return(second_date)
     TimeHelper.record_require_time(200)
 
-    Clock.stub(:serialize).and_return(first_serialized_date)
-    TimeHelper.get_require_time(DateTime.parse(first_serialized_date)).should == 100
-    Clock.stub(:serialize).and_return(second_serialized_date)
-    TimeHelper.get_require_time(DateTime.parse(second_serialized_date)).should == 200
+
+
+    TimeHelper.get_require_time(first_date).should == 100
+    TimeHelper.get_require_time(second_date).should == 200
   end
 end

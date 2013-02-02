@@ -3,18 +3,18 @@ require 'date'
 class TimeHelper
   FILENAME = "spec_helper_times.yml"
   def self.record_require_time(require_time)
-    datas = extract_data
-    date_time = Clock.now
+    datas = all_data
+    date_time = Clock.serialized_now
     datas[date_time] = require_time
     write_data(datas)
   end
 
   def self.get_require_time(run_date)
-    datas = extract_data
+    datas = all_data
     datas[Clock.serialize(run_date)]
   end
 
-  def self.extract_data
+  def self.all_data
     file = open(FILENAME, "a+")
     data = YAML.load(file.read)
     file.close
@@ -31,7 +31,15 @@ end
 
 class Clock
   def self.now
-    serialize(DateTime.now)
+    DateTime.now
+  end
+
+  def self.serialized_now
+    serialize(now)
+  end
+
+  def self.deserialize(serialized)
+    DateTime.parse(serialized)
   end
 
   def self.serialize(date_time)
