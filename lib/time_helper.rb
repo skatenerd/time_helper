@@ -25,7 +25,7 @@ class TimeHelper
 
   def get_require_time(run_date)
     datas = self.class.all_data
-    datas[CrappyORM.serialize(run_date)]
+    datas[CrappyORM.serialize_datetime(run_date)]
   end
 
   def self.all_data
@@ -45,16 +45,16 @@ class TimeHelper
   end
 
   def serialized_now
-    CrappyORM.serialize(@clock.now)
+    CrappyORM.serialize_datetime(@clock.now)
   end
 end
 
 class CrappyORM
-  def self.deserialize(serialized)
+  def self.deserialize_datetime(serialized)
     DateTime.parse(serialized)
   end
 
-  def self.serialize(date_time)
+  def self.serialize_datetime(date_time)
     date_time.strftime("%b %d %Y %H:%M:%S")
   end
 end
