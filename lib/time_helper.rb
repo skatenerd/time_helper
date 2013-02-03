@@ -2,7 +2,6 @@ require 'date'
 
 class TimeHelper
   attr_accessor :clock
-  FILENAME = "spec_helper_times.yml"
 
   def initialize(clock)
     @clock = clock
@@ -29,18 +28,54 @@ class TimeHelper
   end
 
   def record_require_time(require_time)
-    datas = self.class.all_data
-    date_time = serialized_now
-    datas[date_time] = require_time
-    write_data(datas)
+    CrappyORM.save_run(Run.new(@clock.now, require_time))
   end
 
   def get_require_time(run_date)
-    datas = self.class.all_data
-    datas[CrappyORM.serialize_datetime(run_date)]
+    CrappyORM.find_run_by_date(run_date).time
+#    datas = self.class.all_data
+#    datas[CrappyORM.serialize_datetime(run_date)]
   end
 
-  def self.all_data
+  private
+
+  def entries_after(threshold_date)
+    runs = CrappyORM.all_runs.select do |run|
+      run.date >= threshold_date     
+    end
+    runs.map(&:time)
+  end
+end
+
+class Run
+  attr_accessor :date, :time
+
+  def initialize(date, time)
+    @date = date
+    @time = time
+  end
+end
+
+class CrappyORM
+  FILENAME = "spec_helper_times.yml"
+
+  def self.save_run(run)
+    datas = raw_runs
+    datas[serialize_datetime(run.date)] = run.time
+    write_data(datas)
+  end
+
+  def self.find_run_by_date(date)
+    raw_runs[serialize_datetime(date)]
+  end
+
+  def self.all_runs
+    raw_runs.map do |k,v|
+      Run.new(deserialize_datetime(k), v)
+    end
+  end
+
+  def self.raw_runs
     file = open(FILENAME, "a+")
     data = YAML.load(file.read)
     file.close
@@ -48,26 +83,12 @@ class TimeHelper
     data
   end
 
-  private
-
-  def entries_after(threshold_date)
-    self.class.all_data.select do |date, _|
-      CrappyORM.deserialize_datetime(date) >= threshold_date     
-    end.values
-  end
-
-  def write_data(data)
+  def self.write_data(data)
     f=File.open(FILENAME, 'w+')
     f.write(YAML.dump(data))
     f.close
   end
 
-  def serialized_now
-    CrappyORM.serialize_datetime(@clock.now)
-  end
-end
-
-class CrappyORM
   def self.deserialize_datetime(serialized)
     DateTime.parse(serialized)
   end

@@ -15,14 +15,14 @@ end
 
 describe TimeHelper do
   before :each do
-    if File.exist?(TimeHelper::FILENAME)
-      File.delete(TimeHelper::FILENAME)
+    if File.exist?(CrappyORM::FILENAME)
+      File.delete(CrappyORM::FILENAME)
     end
   end
 
   it "records the time" do
     TimeHelper.record_require_time(100)
-    datas = TimeHelper.all_data
+    datas = CrappyORM.raw_runs
     datas[datas.keys.first].should == 100
     datas.keys.first
   end
