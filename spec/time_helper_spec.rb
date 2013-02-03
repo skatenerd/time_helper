@@ -66,4 +66,38 @@ describe TimeHelper do
     TimeHelper.get_require_time(first_date).should == 100
     TimeHelper.get_require_time(second_date).should == 200
   end
+
+  it "gets total time" do
+    clock = MockClock.new([
+      DateTime.parse("may 4 1886 2:33:11pm"),
+      DateTime.parse("may 4 1886 2:33:12pm"),
+      DateTime.parse("may 4 1886 2:33:13pm"),
+      DateTime.parse("may 4 1886 2:33:14pm")
+    ])
+    helper = TimeHelper.new(clock)
+    helper.record_require_time(1)
+    helper.record_require_time(2)
+    helper.record_require_time(3)
+    helper.record_require_time(4)
+
+    helper.total_require_time.should == 10
+  end
+
+  it "gets total time on or after a certain date" do
+    threshold_date = DateTime.parse("may 4 1886 2:33:12pm")
+
+    clock = MockClock.new([
+      DateTime.parse("may 4 1886 2:33:11pm"),
+      threshold_date,
+      DateTime.parse("may 4 1886 2:33:13pm"),
+      DateTime.parse("may 4 1886 2:33:14pm")
+    ])
+    helper = TimeHelper.new(clock)
+    helper.record_require_time(1)
+    helper.record_require_time(2)
+    helper.record_require_time(3)
+    helper.record_require_time(4)
+
+    helper.total_require_time(threshold_date).should == 9
+  end
 end

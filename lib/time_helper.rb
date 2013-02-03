@@ -16,6 +16,18 @@ class TimeHelper
     new(DateTime).get_require_time(run_date)
   end
 
+  def self.total_require_time(run_date=nil)
+    new(DateTime).total_require_time(run_date)
+  end
+
+  def total_require_time(run_date=nil)
+    run_date ||= DateTime.parse("january 1, 1876")
+    entries_after(run_date).reduce(0) do |total, time|
+      total += time
+      total
+    end
+  end
+
   def record_require_time(require_time)
     datas = self.class.all_data
     date_time = serialized_now
@@ -37,6 +49,12 @@ class TimeHelper
   end
 
   private
+
+  def entries_after(threshold_date)
+    self.class.all_data.select do |date, _|
+      CrappyORM.deserialize_datetime(date) >= threshold_date     
+    end.values
+  end
 
   def write_data(data)
     f=File.open(FILENAME, 'w+')
