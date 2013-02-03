@@ -1,6 +1,18 @@
 require 'time_helper'
 require 'pry'
 
+class MockClock
+  attr_accessor :times
+
+  def initialize(times)
+    @times=times
+  end
+
+  def now
+    @times.shift
+  end
+end
+
 describe TimeHelper do
   before :each do
     if File.exist?(TimeHelper::FILENAME)
@@ -18,11 +30,12 @@ describe TimeHelper do
   it "retrieves a recorded time" do
     date_object = DateTime.parse("may 4 1886 2:22:14pm")
 
-    Clock.stub(now: date_object)
+    clock = stub(now: date_object)
+    helper = TimeHelper.new(clock)
 
-    TimeHelper.record_require_time(100)
+    helper.record_require_time(100)
 
-    TimeHelper.get_require_time(date_object).should == 100
+    helper.get_require_time(date_object).should == 100
   end
 
   it "works with the real time" do
@@ -38,14 +51,16 @@ describe TimeHelper do
   end
 
   it "supports multiple writes" do
-    first_date = DateTime.parse("may 4 1886")
-    Clock.stub(:now).and_return(first_date)
-    TimeHelper.record_require_time(100)
+    first_date = DateTime.parse("may 4 1886 2:33:11pm")
+    second_date = DateTime.parse("april 29 1992 2:33:11pm")
+    clock = MockClock.new([
+      first_date,
+      second_date
+    ])
+    time_helper = TimeHelper.new(clock)
 
-    second_date = DateTime.parse("april 29 1992")
-    Clock.stub(:now).and_return(second_date)
-    TimeHelper.record_require_time(200)
-
+    time_helper.record_require_time(100)
+    time_helper.record_require_time(200)
 
 
     TimeHelper.get_require_time(first_date).should == 100
