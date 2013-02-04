@@ -66,7 +66,7 @@ class CrappyORM
   end
 
   def self.find_run_by_date(date)
-    raw_runs[serialize_datetime(date)]
+    Run.new(date, raw_runs[serialize_datetime(date)])
   end
 
   def self.all_runs
