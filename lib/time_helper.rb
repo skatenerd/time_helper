@@ -65,7 +65,7 @@ class TimeHelper
   end
 
   def self.total_require_time(run_date=nil)
-    Compute.new(CrappyORM.new(DateTime), DateTime).total_require_time(run_date)
+    compute_factory.total_require_time(run_date)
   end
 
   def self.is_it_worth_it
