@@ -13,16 +13,44 @@ class MockClock
   end
 end
 
+describe Compute do
+  it 'computes months since start for 0' do
+    all_runs = [
+      Run.new((DateTime.now - 1), 100)
+    ]
+    database = stub(all_runs: all_runs)
+    Compute.new(database, DateTime).months_since_start.should == 0
+  end
+
+  it 'computes months since start for 1' do
+    all_runs = [
+      Run.new((DateTime.now - 60), 100),
+    ]
+    database = stub(all_runs: all_runs)
+    Compute.new(database, DateTime).months_since_start.should == 2
+  end
+
+  it 'projects time you will save' do
+    seconds_in_hour = 60*60
+    all_runs = [
+      Run.new((DateTime.now - 30), seconds_in_hour),
+    ]
+    database = stub(all_runs: all_runs)
+    Compute.new(database, DateTime).hours_you_will_save(5, 10).should == 5
+  end
+end
+
 describe TimeHelper do
   before :each do
     if File.exist?(CrappyORM::FILENAME)
       File.delete(CrappyORM::FILENAME)
     end
+    @orm = CrappyORM.new(DateTime)
   end
 
   it "records the time" do
     TimeHelper.record_require_time(100)
-    datas = CrappyORM.raw_runs
+    datas = @orm.raw_runs
     datas[datas.keys.first].should == 100
     datas.keys.first
   end
@@ -80,7 +108,7 @@ describe TimeHelper do
     helper.record_require_time(3)
     helper.record_require_time(4)
 
-    helper.total_require_time.should == 10
+    TimeHelper.total_require_time.should == 10
   end
 
   it "gets total time on or after a certain date" do
@@ -98,6 +126,6 @@ describe TimeHelper do
     helper.record_require_time(3)
     helper.record_require_time(4)
 
-    helper.total_require_time(threshold_date).should == 9
+    TimeHelper.total_require_time(threshold_date).should == 9
   end
 end
