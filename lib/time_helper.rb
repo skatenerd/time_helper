@@ -34,7 +34,7 @@ class TimeHelper
   end
 
   def record_require_time(require_time)
-    CrappyORM.new(Clock).save_run(Run.new(@clock.now, require_time))
+    CrappyORM.new(clock).save_run(Run.new(clock.now, require_time))
   end
 
   private

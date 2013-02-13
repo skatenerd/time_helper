@@ -43,11 +43,14 @@ describe TimeHelper do
       first_date,
       second_date
     ])
+
     time_helper = TimeHelper.new(clock)
 
     time_helper.record_require_time(100)
     time_helper.record_require_time(200)
 
+
+    require 'pry';binding.pry
 
     TimeHelper.total_require_time(first_date - 1).should == 300
     TimeHelper.total_require_time(first_date + 1).should == 200
