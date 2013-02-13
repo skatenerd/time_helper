@@ -15,10 +15,6 @@ class TimeHelper
     new(DateTime).record_require_time(require_time)
   end
 
-  def self.get_require_time(run_date)
-    new(DateTime).get_require_time(run_date)
-  end
-
   def self.total_require_time(run_date=nil)
     compute_factory.total_require_time(run_date)
   end
@@ -40,9 +36,6 @@ class TimeHelper
     CrappyORM.new(DateTime).save_run(Run.new(@clock.now, require_time))
   end
 
-  def get_require_time(run_date)
-    CrappyORM.new(DateTime).find_run_by_date(run_date).time
-  end
   private
   def self.compute_factory
     Compute.new(CrappyORM.new(DateTime), DateTime)

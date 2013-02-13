@@ -27,27 +27,13 @@ describe TimeHelper do
     datas.keys.first
   end
 
-  it "retrieves a recorded time" do
-    date_object = DateTime.parse("may 4 1886 2:22:14pm")
-
-    clock = stub(now: date_object)
-    helper = TimeHelper.new(clock)
-
-    helper.record_require_time(100)
-
-    helper.get_require_time(date_object).should == 100
-  end
-
   it "works with the real time" do
-    date_object = DateTime.now
-    candidate_checks = [date_object, date_object + (1.0/(3600 * 24))]
     TimeHelper.record_require_time(1992)
+    yesterday = DateTime.now - 1
 
-    winnar = candidate_checks.detect do |attempt|
-      TimeHelper.get_require_time(attempt) == 1992
-    end
 
-    winnar.should_not be_nil
+    TimeHelper.total_require_time.should == 1992
+    TimeHelper.total_require_time(yesterday).should == 1992
   end
 
   it "supports multiple writes" do
@@ -63,8 +49,8 @@ describe TimeHelper do
     time_helper.record_require_time(200)
 
 
-    TimeHelper.get_require_time(first_date).should == 100
-    TimeHelper.get_require_time(second_date).should == 200
+    TimeHelper.total_require_time(first_date - 1).should == 300
+    TimeHelper.total_require_time(first_date + 1).should == 200
   end
 
   it "gets total time" do

@@ -13,10 +13,6 @@ class CrappyORM
     write_data(datas)
   end
 
-  def find_run_by_date(date)
-    Run.new(date, raw_runs[serialize_datetime(date)])
-  end
-
   def all_runs
     raw_runs.map do |k,v|
       Run.new(deserialize_datetime(k), v)
@@ -41,8 +37,8 @@ class CrappyORM
     @clock.parse(serialized)
   end
 
-  def serialize_datetime(date_time)
-    date_time.strftime("%b %d %Y %H:%M:%S")
+  def serialize_datetime(clock)
+    clock.strftime("%b %d %Y %H:%M:%S")
   end
 end
 
