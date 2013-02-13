@@ -11,7 +11,7 @@ class Compute
   end
   
   def total_require_time(run_date=nil)
-    run_date ||= @clock.parse("january 1, 1876")
+    run_date ||= @clock.deserialize("january 1, 1876")
     entries_after(run_date).reduce(0) do |total, time|
       total += time
       total
