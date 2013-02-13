@@ -9,13 +9,13 @@ class CrappyORM
 
   def save_run(run)
     datas = raw_runs
-    datas[serialize_datetime(run.date)] = run.time
+    datas[clock.serialize(run.date)] = run.time
     write_data(datas)
   end
 
   def all_runs
     raw_runs.map do |k,v|
-      Run.new(deserialize_datetime(k), v)
+      Run.new(clock.deserialize(k), v)
     end
   end
 
@@ -31,14 +31,6 @@ class CrappyORM
     f=File.open(FILENAME, 'w+')
     f.write(YAML.dump(data))
     f.close
-  end
-
-  def deserialize_datetime(serialized)
-    @clock.parse(serialized)
-  end
-
-  def serialize_datetime(clock)
-    clock.strftime("%b %d %Y %H:%M:%S")
   end
 end
 

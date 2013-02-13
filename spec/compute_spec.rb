@@ -6,7 +6,7 @@ describe Compute do
       Run.new((DateTime.now - 1), 100)
     ]
     database = stub(all_runs: all_runs)
-    Compute.new(database, DateTime).months_since_start.should == 0
+    Compute.new(database, Clock).months_since_start.should == 0
   end
 
   it 'computes months since start for 1' do
@@ -14,7 +14,7 @@ describe Compute do
       Run.new((DateTime.now - 60), 100),
     ]
     database = stub(all_runs: all_runs)
-    Compute.new(database, DateTime).months_since_start.should == 2
+    Compute.new(database, Clock).months_since_start.should == 2
   end
 
   it 'projects time you will save' do
@@ -23,7 +23,7 @@ describe Compute do
       Run.new((DateTime.now - 30), seconds_in_hour),
     ]
     database = stub(all_runs: all_runs)
-    Compute.new(database, DateTime).hours_you_will_save(5, 10).should == 5
+    Compute.new(database, Clock).hours_you_will_save(5, 10).should == 5
   end
 end
 

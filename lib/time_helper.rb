@@ -1,6 +1,7 @@
 require 'date'
 require 'compute'
 require 'run'
+require 'clock'
 require 'crappy_orm'
 
 class TimeHelper
@@ -12,7 +13,7 @@ class TimeHelper
   end
   
   def self.record_require_time(require_time)
-    new(DateTime).record_require_time(require_time)
+    new(Clock).record_require_time(require_time)
   end
 
   def self.total_require_time(run_date=nil)
@@ -33,12 +34,12 @@ class TimeHelper
   end
 
   def record_require_time(require_time)
-    CrappyORM.new(DateTime).save_run(Run.new(@clock.now, require_time))
+    CrappyORM.new(Clock).save_run(Run.new(@clock.now, require_time))
   end
 
   private
   def self.compute_factory
-    Compute.new(CrappyORM.new(DateTime), DateTime)
+    Compute.new(CrappyORM.new(Clock), Clock)
   end
 
 end

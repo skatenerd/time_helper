@@ -17,7 +17,7 @@ describe TimeHelper do
     if File.exist?(CrappyORM::FILENAME)
       File.delete(CrappyORM::FILENAME)
     end
-    @orm = CrappyORM.new(DateTime)
+    @orm = CrappyORM.new(Clock)
   end
 
   it "records the time" do
