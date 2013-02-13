@@ -10,6 +10,14 @@ class MockClock
   def now
     @times.shift
   end
+
+  def serialize(to_serialize)
+    Clock.serialize(to_serialize)
+  end
+
+  def deserialize(to_deserialize)
+    Clock.deserialize(to_deserialize)
+  end
 end
 
 describe TimeHelper do
@@ -48,9 +56,6 @@ describe TimeHelper do
 
     time_helper.record_require_time(100)
     time_helper.record_require_time(200)
-
-
-    require 'pry';binding.pry
 
     TimeHelper.total_require_time(first_date - 1).should == 300
     TimeHelper.total_require_time(first_date + 1).should == 200
