@@ -1,6 +1,6 @@
 class Clock
-  def self.serialize(serialized)
-    DateTime.now.strftime("%b %d %Y %H:%M:%S")
+  def self.serialize(to_serialize)
+    to_serialize.strftime("%b %d %Y %H:%M:%S")
   end
   def self.deserialize(serialized)
     DateTime.parse(serialized)
