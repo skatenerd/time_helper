@@ -1,8 +1,9 @@
 require 'date'
-require 'compute'
-require 'run'
-require 'clock'
-require 'crappy_orm'
+require_relative './compute'
+require_relative './run'
+require_relative './clock'
+require_relative './crappy_orm'
+require_relative './io_prompt'
 
 class TimeHelper
 
@@ -26,10 +27,10 @@ class TimeHelper
 
     hours_you_will_save = compute_factory.hours_you_will_save(hours_required, months_more)
 
-    if hours_you_will_save > 0
+    if hours_you_will_save < 0
       puts "Not worth it.  You will not save time in the end by fixing spec helper"
     else
-      puts "You should fix it! You will save #{hours_saved}!!!"
+      puts "You should fix it! You will save #{hours_you_will_save} hours!!!"
     end
   end
 

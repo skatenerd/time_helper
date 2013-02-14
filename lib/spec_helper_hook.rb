@@ -1,4 +1,4 @@
-require 'time_helper'
+require_relative './time_helper'
  
 unless defined?(REQUIRED_SPEC_HELPER)
   REQUIRED_SPEC_HELPER = true

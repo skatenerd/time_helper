@@ -1,4 +1,5 @@
-require 'run'
+require_relative './run'
+require 'yaml'
 
 class CrappyORM
   attr_accessor :clock
