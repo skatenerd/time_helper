@@ -12,7 +12,7 @@ class TimeHelper
   def initialize(clock)
     @clock = clock
   end
-  
+
   def self.record_require_time(require_time)
     new(Clock).record_require_time(require_time)
   end

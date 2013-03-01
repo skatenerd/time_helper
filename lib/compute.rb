@@ -9,7 +9,7 @@ class Compute
     total_require_time_in_hours = total_require_time / 3600.0
     ((total_require_time_in_hours/months_since_start) * months_more) - hours_required
   end
-  
+
   def total_require_time(run_date=nil)
     run_date ||= @clock.deserialize("january 1, 1876")
     entries_after(run_date).reduce(0) do |total, time|
@@ -26,7 +26,7 @@ class Compute
 
   def entries_after(threshold_date)
     runs = @database.all_runs.select do |run|
-      run.date >= threshold_date     
+      run.date >= threshold_date
     end
     runs.map(&:time)
   end

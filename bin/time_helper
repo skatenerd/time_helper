@@ -1,2 +1,4 @@
+#!/usr/bin/env ruby -s
+
 require_relative '../lib/time_helper'
 TimeHelper.is_it_worth_it
