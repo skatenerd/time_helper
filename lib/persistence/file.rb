@@ -1,4 +1,4 @@
-require_relative './run'
+require_relative '../run'
 require 'yaml'
 
 class CrappyORM
